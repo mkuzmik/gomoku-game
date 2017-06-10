@@ -10,7 +10,7 @@ game board = do
     execute board "have won"
   else do
   print board
-  putStr "input> "
+  putStr "prompt> "
   hFlush stdout
   cmd <- getLine
   execute board cmd
