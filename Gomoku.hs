@@ -10,7 +10,16 @@ instance Show Field where
 
 data Board = Board {cells::[[Field]], size::Int} -- second arg is size
 instance Show Board where
-  show (Board (x:lst) size) = "\t" ++ showRow x ++ "\n" ++ show (Board lst size)
+  show (Board (x:lst) size) = if (length (x:lst) == size) then
+                                "\t" ++
+                                "1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n"
+                                ++ "\t" ++ showRow x ++ "1\n"
+                                ++ show (Board lst size)
+                              else
+                                "\t" ++ showRow x ++
+                                (show (size - (length lst))) ++
+                                 "\n" ++
+                                show (Board lst size)
   show (Board [] _)      = ""
 
 showRow :: [Field] -> String
@@ -33,9 +42,9 @@ getField :: Board -> Int -> Int -> Field
 getField board x y = (getRow board x)!!y
 
 insert :: Board -> Field -> Int -> Int -> Board
-insert board@(Board _ size) field x y =
-                                      Board [  [ (if (y == j && x == i) then
-                                      (putIfPossible board field x y)
+insert board@(Board cells size) field x y =
+                                      Board [  [ (if ((y-1) == j && (x-1) == i) then
+                                      (putIfPossible board field (y-1) (x-1))
                                       else getField board j i)
                                       | i <- [0..size-1]] | j <- [0..size-1] ] size
 
@@ -46,14 +55,14 @@ putIfPossible board field x y
 
 -- isGameWon function gets Board and checks whether any player has already
 -- won the game, then returns this player or Null if game is not won yet
---
+
 -- it has to parse every row, column and slant into the list of Fields
 -- then check it isFiveInRow function
 isGameWon :: Board -> Field
 isGameWon board
       | (checkRows board /= Null) = checkRows board
       | (checkCols board /= Null) = checkCols board
-      | (checkSlants board /= Null) = checkSlants board
+--      | (checkSlants board /= Null) = checkSlants board
       | otherwise = Null
 
 checkRows :: Board -> Field
@@ -68,27 +77,19 @@ checkCols board@(Board cells size)
       | ((isFiveInRow (aggregateColumn board (size-1))) /= Null) = isFiveInRow (aggregateColumn board (size-1))
       | otherwise = checkCols (Board cells (size-1))
 
-checkSlants :: Board -> Field
-checkSlants board@(Board _ 0) = Null
-checkSlants board@(Board cells size)
-      | ((isFiveInRow (aggregateSlant board (size-1) 1)) /= Null) = isFiveInRow (aggregateSlant board (size-1) 1)
-      | ((isFiveInRow (aggregateSlant board (size-1) 1)) /= Null) = isFiveInRow (aggregateSlant board (size-1) 1)
-      | otherwise = checkSlants (Board cells (size-1))
+ -- checkSlants here
 
-aggregateSlant :: Board -> Int -> Int -> [Field]
-aggregateSlant board x slantNo
-      | (slantNo == 0) = aggregateUpperSlant board x 0
-      | otherwise = aggregateLowerSlant board x 0
+-- gets board, starting point (x,y) and direction function ( (+1) or (-1))
+aggregateSlant :: Board -> Int -> Int -> (Int -> Int) -> [Field]
+aggregateSlant board@(Board cells size) x y fun
+      | isIndexAtBoard x y board =
+          (getField board x y):(aggregateSlant board (fun x) (fun y) fun)
+      | otherwise = []
 
-aggregateUpperSlant :: Board -> Int -> Int -> [Field]
-aggregateUpperSlant board@(Board cells size) slantNo tempCounter
-      | (slantNo == size) = []
-      | otherwise = (getField board slantNo tempCounter):(aggregateUpperSlant board (slantNo+1) (tempCounter+1))
-
-aggregateLowerSlant :: Board -> Int -> Int -> [Field]
-aggregateLowerSlant board@(Board cells size) slantNo tempCounter
-      | (slantNo == size) = []
-      | otherwise = (getField board tempCounter slantNo):(aggregateUpperSlant board (slantNo+1) (tempCounter+1))
+isIndexAtBoard :: Int -> Int -> Board -> Bool
+isIndexAtBoard x y board@(Board _ size)
+      | (x < 0 || y < 0 || x >= size || y >= size) = False
+      | otherwise = True
 
 aggregateColumn :: Board -> Int -> [Field]
 aggregateColumn board@(Board [] size) no = []
