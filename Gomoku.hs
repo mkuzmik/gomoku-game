@@ -59,10 +59,10 @@ putIfPossible board field x y
 -- it has to parse every row, column and slant into the list of Fields
 -- then check it isFiveInRow function
 isGameWon :: Board -> Field
-isGameWon board
+isGameWon board@(Board cells size)
       | (checkRows board /= Null) = checkRows board
       | (checkCols board /= Null) = checkCols board
---      | (checkSlants board /= Null) = checkSlants board
+      | (checkSlants board size /= Null) = checkSlants board size
       | otherwise = Null
 
 checkRows :: Board -> Field
@@ -78,12 +78,24 @@ checkCols board@(Board cells size)
       | otherwise = checkCols (Board cells (size-1))
 
  -- checkSlants here
+checkSlants :: Board -> Int -> Field
+checkSlants _ 0 = Null
+checkSlants board@(Board cells size) boardSize
+      | ((isFiveInRow (aggregateSlant board (boardSize-1) 0 (+1) (+1))) /= Null) =
+          isFiveInRow (aggregateSlant board (boardSize-1) 0 (+1) (+1))
+      | ((isFiveInRow (aggregateSlant board (boardSize-1) (size-1) (+1) (+(-1)))) /= Null) =
+          isFiveInRow (aggregateSlant board (boardSize-1) (size-1) (+1) (+(-1)))
+      | ((isFiveInRow (aggregateSlant board 0 (boardSize-1) (+1) (+1))) /= Null) =
+          isFiveInRow (aggregateSlant board 0 (boardSize-1) (+1) (+1))
+      | ((isFiveInRow (aggregateSlant board 0 (boardSize-1) (+1) (+(-1)))) /= Null) =
+          isFiveInRow (aggregateSlant board 0 (boardSize-1) (+1) (+(-1)))
+      | otherwise = checkSlants board (boardSize-1)
 
 -- gets board, starting point (x,y) and direction function ( (+1) or (-1))
-aggregateSlant :: Board -> Int -> Int -> (Int -> Int) -> [Field]
-aggregateSlant board@(Board cells size) x y fun
+aggregateSlant :: Board -> Int -> Int -> (Int -> Int) -> (Int -> Int) -> [Field]
+aggregateSlant board@(Board cells size) x y fun fun2
       | isIndexAtBoard x y board =
-          (getField board x y):(aggregateSlant board (fun x) (fun y) fun)
+          (getField board x y):(aggregateSlant board (fun x) (fun2 y) fun fun2)
       | otherwise = []
 
 isIndexAtBoard :: Int -> Int -> Board -> Bool
