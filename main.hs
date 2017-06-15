@@ -1,8 +1,9 @@
 import Gomoku
+import Ai
 import System.IO(hFlush, stdout)
 
 
-
+-- main function
 main = do
   putStrLn "Choose game mode: \n \
            \ custom / singleplayer / multiplayer\n\n"
@@ -12,12 +13,27 @@ main = do
 chooseGameMode :: String -> IO ()
 chooseGameMode "custom" = customGame createStandardGomokuBoard
 chooseGameMode "multiplayer" = multiPlayerGame createStandardGomokuBoard O
-chooseGameMode "singleplayer" = do
-  putStrLn "Not accessible yet !"
-  main
+chooseGameMode "singleplayer" = singlePlayerGame createStandardGomokuBoard O
 chooseGameMode _ = do
   putStrLn "Wrong command!\n Try again..\n"
   main
+
+-- SinglePlayer mode
+-- player is O
+-- computer is X
+singlePlayerGame :: Board -> Field -> IO()
+singlePlayerGame board nextPlayer =
+  let isWon = isGameWon board
+  if (isWon /= Null) then
+    execute board "have won"
+  else do
+    print board
+    singlePlayerTurn board nextPlayer
+
+singlePlayerTurn :: Board -> Field -> IO()
+singlePlayerTurn board nextPlayer =
+  | nextPlayer == O = computerMove board O
+  | otherwise = execute board "player move"
 
 -- Multiplayer mode
 multiPlayerGame :: Board -> Field -> IO()
