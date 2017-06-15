@@ -12,3 +12,7 @@ makeMove _ _ = getRandomPosition 1 19
 -- two numbers in touple from range
 getRandomPosition :: Int -> Int -> (Int, Int)
 getRandomPosition fir sec = (unsafePerformIO ( getStdRandom ( randomR(fir,sec))),unsafePerformIO ( getStdRandom ( randomR(fir,sec))))
+
+-- Node (Field X or O) (Position) (Board after putting Filed into Position)
+-- (Potential) (Roots)
+data DecisionTree = Node Field (Int,Int) Board Int [DecisionTree] | Empty
