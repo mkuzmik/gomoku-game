@@ -11,6 +11,7 @@
 - [x] Create game mode selection.
 - [ ] Create AI module
 - [ ] Enable singleplayer mode.
+- [ ] Report exception when typed player tries to put field out of board or onto existing field.
 
 ## Modules
 - `main.hs` is the main module. It contains main fuction, which loops the game

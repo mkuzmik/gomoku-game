@@ -22,7 +22,7 @@ chooseGameMode _ = do
 -- player is O
 -- computer is X
 singlePlayerGame :: Board -> Field -> IO()
-singlePlayerGame board nextPlayer =
+singlePlayerGame board nextPlayer = do
   let isWon = isGameWon board
   if (isWon /= Null) then
     execute board "have won"
@@ -31,9 +31,14 @@ singlePlayerGame board nextPlayer =
     singlePlayerTurn board nextPlayer
 
 singlePlayerTurn :: Board -> Field -> IO()
-singlePlayerTurn board nextPlayer =
-  | nextPlayer == O = computerMove board O
+singlePlayerTurn board nextPlayer
+  | nextPlayer == X = computerMove board X
   | otherwise = execute board "player move"
+
+computerMove :: Board -> Field -> IO()
+computerMove board field = do
+  let pos = makeMove board field
+  singlePlayerGame (insert board (X :: Field) ((fst pos) :: Int) ((snd pos) :: Int)) O
 
 -- Multiplayer mode
 multiPlayerGame :: Board -> Field -> IO()
@@ -93,6 +98,13 @@ execute board "o move" = do
   putStrLn "Y position: "
   y <- getLine
   multiPlayerGame (insert board (O :: Field) (read x :: Int) (read y :: Int)) X
+execute board "player move" = do
+  putStrLn "Your move !"
+  putStrLn "X position: "
+  x <- getLine
+  putStrLn "Y position: "
+  y <- getLine
+  singlePlayerGame (insert board (O :: Field) (read x :: Int) (read y :: Int)) X
 execute board "have won" =
   putStrLn (show board ++ "Player " ++ (show (isGameWon board)) ++ " have won!")
 execute board _ = do
