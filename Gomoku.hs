@@ -53,6 +53,12 @@ putIfPossible board field x y
       | ((getField board x y) == Null) = field
       | otherwise = getField board x y
 
+-- useful for building DecisionTree
+isFieldEmpty :: Board -> (Int,Int) -> Bool
+isFieldEmpty board pos
+      | getField board ((fst pos) - 1) ((snd pos) - 1) == Null = True
+      | otherwise = False
+
 -- isGameWon function gets Board and checks whether any player has already
 -- won the game, then returns this player or Null if game is not won yet
 
