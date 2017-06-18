@@ -1,3 +1,4 @@
+-- Author: Mateusz Kuźmik
 module Ai (makeMove) where
 
 import Gomoku
@@ -23,7 +24,24 @@ data DecisionTree = Root Board Field [DecisionTree] | Node {currentPlayer::Field
                                        resultBoard::Board,
                                        potential::Double,
                                        aggregatedPotential::Double,
-                                       children::[DecisionTree] } | Empty deriving Show
+                                       children::[DecisionTree] } deriving Show
+
+printFirstLayer :: DecisionTree -> String
+printFirstLayer (Root _ _ []) = ""
+printFirstLayer (Root board player ((Node _ _ _ pot _ _):children)) = show board ++ show pot ++ " " ++ printFirstLayer (Root board player children)
+
+
+-- takes minimal aggrPotential from list of nodes
+aggregateNodes :: [DecisionTree] -> Double
+aggregateNodes [] = 1
+aggregateNodes ((Node currentPlayer move resultBoard potential aggr children):nodes) = min aggr (aggregateNodes nodes)
+
+aggregateTree :: DecisionTree -> DecisionTree
+aggregateTree (Root board player children) = Root board player $ aggregateChildren children
+
+aggregateChildren :: [DecisionTree] -> [DecisionTree]
+aggregateChildren [] = []
+aggregateChildren ((Node curr move res pot agg children):nodes) = (Node curr move res pot (aggregateNodes children) (aggregateChildren children)):(aggregateChildren nodes)
 
 buildDecisionTree :: Board -> Field -> Int -> DecisionTree
 buildDecisionTree board player height = Root board player $ buildNodes board player (1,1) height

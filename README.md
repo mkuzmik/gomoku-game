@@ -19,7 +19,7 @@
 - [x] Create `Ai.hs` module.
 - [x] Create function which makes move on random field.
 - [x] Implement a Decision Tree. It contains every possible movement in n rounds.
-- [x] Implement a function that is able to rate potential of the Board.
+- [x] Implement a function that is able to rate potential of the Board.  
 - [ ] Connect single player mode with choosing right path using Decision Tree.
 
 ## Modules

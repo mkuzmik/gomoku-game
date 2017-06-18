@@ -1,3 +1,4 @@
+-- Author: Mateusz Kuźmik
 module Gomoku where
 
 data Field =  Null | X | O deriving (Eq)
@@ -11,7 +12,7 @@ instance Show Field where
 data Board = Board {cells::[[Field]], size::Int} -- second arg is size
 instance Show Board where
   show (Board (x:lst) size) = if (length (x:lst) == size) then
-                                "\t" ++
+                                "   X -> " ++
                                 "1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n"
                                 ++ "\t" ++ showRow x ++ "1\n"
                                 ++ show (Board lst size)
@@ -20,7 +21,8 @@ instance Show Board where
                                 (show (size - (length lst))) ++
                                  "\n" ++
                                 show (Board lst size)
-  show (Board [] _)      = ""
+  show (Board [] _)      = "\n\t\t\t\t\t      \2191\
+                           \\n\t\t\t\t\t      Y"
 
 showRow :: [Field] -> String
 showRow [] = ""
