@@ -8,9 +8,9 @@
 
 ## Game modes
  Gomoku The Game has three modes:
- - Single Player - a mode in which you are an 'O' and computer is an 'X'. Every turn you are asked only of coordinates (X and Y) of your next move.
- - Multi Player - using this mode you can play with other person.
- - Custom - this mode is especially for testing purposes. You can choose which figure you want to choose and then put the coordinates.
+ - **Single Player** is a mode in which you are an 'O' and computer is an 'X'. Every turn you are asked only of coordinates (X and Y) of your next move.
+ - **Multi Player**, using this mode you can play with other person.
+ - **Custom** mode is especially for testing purposes. You can choose which figure you want to choose and then put the coordinates. When you run Custom mode you will get a prompt where yo are supposed to put a command. If you do not know any type empty line, you will get a hint.
 
 ## Task list
 - [x] Create `Gomoku.hs`module, which implements basic game mechanisms.
