@@ -12,6 +12,9 @@
  - **Multi Player**, using this mode you can play with other person.
  - **Custom** mode is especially for testing purposes. You can choose which figure you want to choose and then put the coordinates. When you run Custom mode you will get a prompt where yo are supposed to put a command. If you do not know any type empty line, you will get a hint.
 
+## Single Player
+ Original conception was that computer is choosing next move by analysis a tree of all possible moves. This tree (called DecisionTree in my project in Ai.hs module) is already implemented, but it is not working properly, therefore computer player choose random position on a board yet.
+
 ## Task list
 - [x] Create `Gomoku.hs`module, which implements basic game mechanisms.
 - [x] Create 'main' function in `main.hs`, which makes you able to play Gomoku in command line interface.
