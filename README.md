@@ -14,6 +14,7 @@
 
 ## Single Player
  Original conception was that computer is choosing next move by analysis a tree of all possible moves. This tree (called DecisionTree in my project in Ai.hs module) is already implemented, but it is not working properly, therefore computer player choose random position on a board yet.
+ If you would like to watch this three then run `ghci`, load `:l Ai.hs` module and then runt the following command `buildDecisionTree createStandardGomokuBoard X 3`. It starts generating a DecisionTree from empty game board of height 3 for as an X player.
 
 ## Task list
 - [x] Create `Gomoku.hs`module, which implements basic game mechanisms.
